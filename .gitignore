@@ -5,4 +5,5 @@ composer.lock
 .idea/
 .vscode/
 *.log
-/composer.phar 
+/composer.phar
+.htaccess
