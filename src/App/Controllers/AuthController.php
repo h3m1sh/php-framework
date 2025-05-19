@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use Framework\TemplateEngine;
 use App\Services\ValidatorService;
+use Framework\Exceptions\ValidationException;
 
 class AuthController {
     public function __construct(
@@ -14,9 +15,7 @@ class AuthController {
     ) {}
 
     public function registerView() {
-        echo $this->view->render("register.php", [
-            'title' => 'Register'
-        ]);
+        echo $this->view->render("register.php");
     }
 
     public function register()
