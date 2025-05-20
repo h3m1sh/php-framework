@@ -65,15 +65,15 @@
         <label class="block">
             <span class="text-gray-700">Social Media URL</span>
             <input
-                    name="socialMedialURL"
-                    value="<?php echo e($oldFormData['socialMedialURL'] ?? ''); ?>"
+                    name="socialMediaURL"
+                    value="<?php echo e($oldFormData['socialMediaURL'] ?? ''); ?>"
                 type="text"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 placeholder=""
             />
-            <?php if(array_key_exists('socialMedialURL', $errors)) : ?>
+            <?php if(array_key_exists('socialMediaURL', $errors)) : ?>
                 <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                    <?php foreach($errors['socialMedialURL'] as $error) : ?>
+                    <?php foreach($errors['socialMediaURL'] as $error) : ?>
                         <p><?php echo $error; ?></p>
                     <?php endforeach; ?>
                 </div>
