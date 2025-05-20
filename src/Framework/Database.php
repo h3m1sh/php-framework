@@ -18,7 +18,9 @@ class Database
         $dsn = "{$driver}:{$config}";
 
         try {
-            $this->connection = new PDO($dsn, $username, $password);
+            $this->connection = new PDO($dsn, $username, $password, [
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ]);
         } catch (PDOException $e) {
             die("Connection failed: " . $e->getMessage());
         }
@@ -36,5 +38,10 @@ class Database
     public function count()
     {
         return $this->stmt->fetchColumn();
+    }
+
+    public function find()
+    {
+        return $this->stmt->fetch();
     }
 }
