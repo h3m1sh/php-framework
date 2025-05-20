@@ -29,4 +29,8 @@ class AuthController {
 
         redirectTo('/');
     }
+
+    public function loginView() {
+        echo $this->view->render("login.php");
+    }
 }
