@@ -28,4 +28,14 @@ class TransactionService{
 
     }
 
+    public function getUserTransactions(){
+        $transactions = $this->db->query(
+            "SELECT *, DATE_FORMAT(date, '%d/%m/%Y') AS formatted_date
+            FROM transactions WHERE user_id = :user_id",
+            ['user_id' => $_SESSION['user']]
+        )->findAll();
+
+        return $transactions;
+    }
+
 }
