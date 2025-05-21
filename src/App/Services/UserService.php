@@ -44,6 +44,10 @@ class UserService
         }catch (\Throwable $e){
             dd($e->getMessage());
         }
+
+        session_regenerate_id();
+
+        $_SESSION['user'] = $this->db->id();
     }
 
     public function login(array $formData){
