@@ -20,7 +20,15 @@ class SessionMiddleware implements MiddlewareInterface
             throw new SessionException("Headers already started. Consider enabling output buffering. Data outputted from {$filename} - Line:{$line} ");
         }
 
-        session_start();
+        session_set_cookie_params([
+            'secure' => $_ENV['APP_ENV'] === 'production',
+            'httponly' => true,
+            'samesite' => 'lax'
+        ]);
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
 
         $next();
 
