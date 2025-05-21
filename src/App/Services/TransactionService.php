@@ -28,14 +28,28 @@ class TransactionService{
 
     }
 
-    public function getUserTransactions(){
-        $transactions = $this->db->query(
-            "SELECT *, DATE_FORMAT(date, '%d/%m/%Y') AS formatted_date
-            FROM transactions WHERE user_id = :user_id",
-            ['user_id' => $_SESSION['user']]
-        )->findAll();
+    public function getUserTransactions(string $searchTerm = null)
+    {
+        // Get search term from parameter instead of directly from $_GET
+        $searchTerm = $searchTerm ?? ($_GET['s'] ?? '');
 
-        return $transactions;
+        // Create base query
+        $query = "SELECT *, DATE_FORMAT(date, '%d/%m/%Y') AS formatted_date 
+              FROM transactions 
+              WHERE user_id = :user_id";
+
+        $params = ['user_id' => $_SESSION['user']];
+
+        // Only add description search if search term is provided
+        if ($searchTerm !== '') {
+            $query .= " AND description LIKE :description";
+            $params['description'] = "%$searchTerm%";
+        }
+
+        // Add sorting for better user experience
+        $query .= " ORDER BY date DESC";
+
+        return $this->db->query($query, $params)->findAll();
     }
 
 }
