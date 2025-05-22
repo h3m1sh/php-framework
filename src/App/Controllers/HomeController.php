@@ -20,13 +20,14 @@ class HomeController{
         $searchTerm = ($_GET['s'] ?? null);
 
 
-        $transactions = $this->transactionService->getUserTransactions(
+        [$transactions, $count] = $this->transactionService->getUserTransactions(
             $length,
             $offset
         );
+
+        $lastpage = ceil($count / $length);
         
 
-            var_dump($page, $searchTerm);
             echo $this->view->render("/index.php", [
             'title' => 'Home Page',
             'transactions' => $transactions,
@@ -35,6 +36,11 @@ class HomeController{
                 'p' => $page - 1,
                 's' => $searchTerm
             ]),
+                'lastPage' => $lastpage,
+                'nextPageQuery' => http_build_query([
+                    'p' => $page + 1,
+                    's' => $searchTerm
+                ])
         ]);
 
     }

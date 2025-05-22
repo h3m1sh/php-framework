@@ -33,19 +33,29 @@ class TransactionService{
     {
         $searchTerm = $searchTerm ?? ($_GET['s'] ?? '');
 
+        $params = [
+            'user_id' => $_SESSION['user'],
+            'description' => "%{$searchTerm}%"
+        ];
+
         $transactions = $this->db->query(
             "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') as formatted_date
                     FROM transactions 
                     WHERE user_id = :user_id
                     AND description LIKE :description
                     LIMIT {$length} OFFSET {$offset}",
-                    [
-                        'user_id' => $_SESSION['user'],
-                        'description' => "%{$searchTerm}%"
-                    ]
+                    $params
         )->findAll();
 
-        return $transactions;
+        $transactionCount = $this->db->query(
+            "SELECT COUNT(*)
+                    FROM transactions 
+                    WHERE user_id = :user_id
+                    AND description LIKE :description",
+                    $params
+                    )->count();
+
+        return [$transactions, $transactionCount];
 
     }
 
