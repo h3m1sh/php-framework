@@ -8,8 +8,9 @@ use Framework\Database;
 
 class TransactionService{
 
-    public function __construct(private Database $db){
 
+
+    public function __construct(private Database $db){
     }
 
     public function create(array $formData){
@@ -28,28 +29,24 @@ class TransactionService{
 
     }
 
-    public function getUserTransactions(string $searchTerm = null)
+    public function getUserTransactions(int $length, int $offset,string $searchTerm = null)
     {
-        // Get search term from parameter instead of directly from $_GET
         $searchTerm = $searchTerm ?? ($_GET['s'] ?? '');
 
-        // Create base query
-        $query = "SELECT *, DATE_FORMAT(date, '%d/%m/%Y') AS formatted_date 
-              FROM transactions 
-              WHERE user_id = :user_id";
+        $transactions = $this->db->query(
+            "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') as formatted_date
+                    FROM transactions 
+                    WHERE user_id = :user_id
+                    AND description LIKE :description
+                    LIMIT {$length} OFFSET {$offset}",
+                    [
+                        'user_id' => $_SESSION['user'],
+                        'description' => "%{$searchTerm}%"
+                    ]
+        )->findAll();
 
-        $params = ['user_id' => $_SESSION['user']];
+        return $transactions;
 
-        // Only add description search if search term is provided
-        if ($searchTerm !== '') {
-            $query .= " AND description LIKE :description";
-            $params['description'] = "%$searchTerm%";
-        }
-
-        // Add sorting for better user experience
-        $query .= " ORDER BY date DESC";
-
-        return $this->db->query($query, $params)->findAll();
     }
 
 }
