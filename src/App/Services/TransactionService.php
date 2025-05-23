@@ -59,9 +59,17 @@ class TransactionService{
 
     }
 
-    public function editView(array $params)
-    {
-        dd($params);
+    public function getUserTransaction(string $id){
+        return $this->db->query(
+            "SELECT *, DATE_FORMAT(date, '%Y-%m-%d') as formatted_date
+                    FROM transactions
+                    WHERE id = :id AND user_id = :user_id",
+            [
+                'id' => $id,
+                'user_id' => $_SESSION['user']
+            ]
+        )->find();
     }
+
 
 }
