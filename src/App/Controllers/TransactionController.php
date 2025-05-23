@@ -32,4 +32,9 @@ class TransactionController
 
         redirectTo('/');
     }
+
+    public function editView(array $params)
+    {
+        $this->transactionService->editView($params);
+    }
 }
